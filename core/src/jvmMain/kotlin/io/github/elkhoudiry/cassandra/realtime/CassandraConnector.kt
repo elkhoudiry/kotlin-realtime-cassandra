@@ -1,6 +1,6 @@
-package cassandra
+package io.github.elkhoudiry.cassandra.realtime
 
-import cassandra.error.CassandraNotInitializedException
+import io.github.elkhoudiry.cassandra.realtime.error.CassandraNotInitializedException
 import com.datastax.oss.driver.api.core.CqlSession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext

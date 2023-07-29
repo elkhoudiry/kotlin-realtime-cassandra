@@ -1,0 +1,55 @@
+name: Publish
+
+concurrency: publishing_new_release
+
+on:
+    push:
+        tags:
+            - '*'
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            packages: write
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  ref: dev
+                  fetch-depth: 0
+
+            - uses: actions/setup-java@v3
+              with:
+                  java-version: '17'
+                  distribution: 'zulu'
+
+            - name: Validate gradle wrapper
+              uses: gradle/wrapper-validation-action@v1
+
+            - name: Prepare version
+              id: prepare_version
+              run: |
+                  LATEST_TAG=$(git tag --sort "committerdate" | grep -E '[0-9]+.[0-9]+.[0-9]+' | tail -1)
+                  CURRENT_VERSION="${LATEST_TAG:-0.0.0}"
+                  IFS='.' read -ra VERSION_SPLIT <<< $CURRENT_VERSION          
+                  NEW_VERSION=${VERSION_SPLIT[0]}.${VERSION_SPLIT[1]}.$((${VERSION_SPLIT[2]} + 1))
+                  REF_TAG=$(echo "${GITHUB_REF}" | grep -E 'refs/tags/*' | awk '{split($0, a, "/"); print a[3]}') 
+                  NEW_VERSION="${REF_TAG:-$NEW_VERSION}"
+                  echo new version: $NEW_VERSION
+                  echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+            - name: Restore gradle
+              uses: gradle/gradle-build-action@v2
+              with:
+                  cache-read-only: false
+              env:
+                  LATEST_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+                  PUBLISH_VERSION: ${{ steps.prepare_version.outputs.version }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish packages
+              run: ./gradlew -i publish
+              env:
+                  PUBLISH_REF: ${{ steps.prepare_version.outputs.version }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
