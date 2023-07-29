@@ -48,7 +48,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish packages
-              run: ./gradlew -i publish
+              run: ./gradlew -i publishToSonatype closeAndReleaseSonatypeStagingRepository
               env:
                   PUBLISH_REF: ${{ steps.prepare_version.outputs.version }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
