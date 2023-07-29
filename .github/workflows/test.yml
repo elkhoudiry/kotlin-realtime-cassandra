@@ -20,7 +20,6 @@ jobs:
                     port: 9042
                     connect-timeout: 30
                     keyspace: test
-                    scripts_path: ""
 
             -   name: Run tests
                 run: |
