@@ -3,5 +3,7 @@ plugins {
     id("jvm.target.library")
 }
 
-group = "io.github.elkhoudiry"
-version = "0.0.1"
+jvmDependencies {
+    implementation(libs.cassandra.driver.core)
+    implementation(libs.cassandra.driver.query.builder)
+}
