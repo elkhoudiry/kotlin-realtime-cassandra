@@ -1,5 +1,7 @@
 [versions]
-cassandraDriver = "4.17.0"
+cassandraDriver = "4.13.0"
+cassandraUnit = "4.3.1.0"
+
 javaCompatibility = "17"
 
 kotlin = "1.8.20"
@@ -10,6 +12,7 @@ kotlinxSerialization = "1.5.0"
 [libraries]
 cassandra-driver-core = { group = "com.datastax.oss", name = "java-driver-core", version.ref = "cassandraDriver" }
 cassandra-driver-query-builder = { group = "com.datastax.oss", name = "java-driver-query-builder", version.ref = "cassandraDriver" }
+cassandra-unit-test = { group = "org.cassandraunit", name = "cassandra-unit", version.ref = "cassandraUnit" }
 
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
