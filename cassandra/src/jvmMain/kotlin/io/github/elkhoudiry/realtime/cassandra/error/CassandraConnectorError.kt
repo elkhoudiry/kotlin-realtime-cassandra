@@ -1,4 +1,4 @@
-package io.github.elkhoudiry.cassandra.realtime.error
+package io.github.elkhoudiry.realtime.cassandra.error
 
 interface CassandraConnectorError
 

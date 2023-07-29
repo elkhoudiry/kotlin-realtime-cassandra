@@ -1,7 +1,7 @@
-package io.github.elkhoudiry.cassandra.realtime
+package io.github.elkhoudiry.realtime.cassandra
 
-import io.github.elkhoudiry.cassandra.realtime.error.CassandraNotInitializedException
-import io.github.elkhoudiry.cassandra.realtime.CassandraConnector
+import io.github.elkhoudiry.realtime.cassandra.error.CassandraNotInitializedException
+import io.github.elkhoudiry.realtime.cassandra.CassandraConnector
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
