@@ -12,15 +12,14 @@ jobs:
     test:
         name: Test
         runs-on: ubuntu-latest
+        services:
+            cassandra:
+                image: cassandra
+                ports:
+                    - 9042:9042
+                options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
         steps:
             -   uses: actions/checkout@v3
-            -   uses: fabasoad/setup-cassandra-action@main
-                with:
-                    host: "192.13.131.0"
-                    port: 9042
-                    connect-timeout: 30
-                    keyspace: test
-                    scripts_path: "./scripts"
 
             -   name: Run tests
                 run: |
