@@ -25,9 +25,8 @@ kotlin {
             matching { it.name in publicationsFromMainHost }.all {
                 val targetPublication = this@all
                 tasks.withType<AbstractPublishToMaven>().matching { it.publication == targetPublication }
-                println("[LOG] $name")
                 if (this is MavenPublication) {
-                    this.groupId = project.getPublishGroup()
+                    this.groupId = "io.github.elkhoudiry"
                     this.artifactId = "realtime-cassandra-$name".replace("kotlinMultiplatform", "").removeSuffix("-")
                     this.version = project.getNewPublishVersion()
                 }
