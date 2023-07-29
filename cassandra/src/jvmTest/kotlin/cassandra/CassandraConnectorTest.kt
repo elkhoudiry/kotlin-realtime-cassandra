@@ -14,7 +14,6 @@ class CassandraConnectorTest {
 
     @BeforeTest
     fun setup() {
-        Thread.sleep(5000)
         cassandra = CassandraConnector()
     }
 
