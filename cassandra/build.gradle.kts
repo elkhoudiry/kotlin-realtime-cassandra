@@ -14,6 +14,7 @@ val javadocJar by tasks.registering(Jar::class) {
 // Stub secrets to let the project sync and build without the publication values set up
 ext["signing.keyId"] = null
 ext["signing.password"] = null
+ext["signing.secretKey"] = null
 ext["signing.secretKeyRingFile"] = null
 ext["ossrhUsername"] = null
 ext["ossrhPassword"] = null
@@ -31,6 +32,7 @@ if (secretPropsFile.exists()) {
 } else {
     ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
     ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
+    ext["signing.secretKey"] = System.getenv("SIGNING_KEY")
     ext["signing.secretKeyRingFile"] = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
     ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
     ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
@@ -99,6 +101,7 @@ jvmDependencies {
 }
 
 signing {
+    useInMemoryPgpKeys(getExtraString("signing.secretKey"), getExtraString("signing.password"))
     sign(publishing.publications)
 }
 

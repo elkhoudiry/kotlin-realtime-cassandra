@@ -52,3 +52,9 @@ jobs:
               env:
                   PUBLISH_REF: ${{ steps.prepare_version.outputs.version }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SIGNING_KEY_ID: ${{ secrets.GPG_KEY_ID_SHORT }}
+                  SIGNING_KEY: ${{ secrets.GPG_KEY }}
+                  SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+                  SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.GPG_SECRET_FILE_PATH }}
+                  OSSRH_USERNAME: ${{ secrets.OSSRH_USER_NAME }}
+                  OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
