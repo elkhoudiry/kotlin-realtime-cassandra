@@ -17,7 +17,7 @@ jobs:
                 image: cassandra
                 ports:
                     - 9042:9042
-                options: --health-cmd "cqlsh" --health-interval 5s --health-retries 24
+                options: --health-cmd "cqlsh" --health-interval 5s --health-retries 60
         steps:
             -   run: docker ps
             -   uses: actions/checkout@v3
