@@ -7,7 +7,3 @@ jvmDependencies {
     implementation(libs.cassandra.driver.core)
     implementation(libs.cassandra.driver.query.builder)
 }
-
-jvmTestDependencies {
-    implementation(libs.cassandra.unit.test)
-}

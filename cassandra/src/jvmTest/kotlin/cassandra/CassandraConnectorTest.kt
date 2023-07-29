@@ -1,13 +1,8 @@
 package cassandra
 
 import cassandra.error.CassandraNotInitializedException
-import com.datastax.oss.driver.api.core.CqlSession
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeoutOrNull
-import org.cassandraunit.CQLDataLoader
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -19,18 +14,16 @@ class CassandraConnectorTest {
 
     @BeforeTest
     fun setup() {
-        Thread { EmbeddedCassandraServerHelper.startEmbeddedCassandra(5000) }.start()
         Thread.sleep(5000)
         cassandra = CassandraConnector()
     }
 
     @AfterTest
     fun tearDown() {
-        EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
         runBlocking {
             try {
                 cassandra.close()
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
 
             }
         }
