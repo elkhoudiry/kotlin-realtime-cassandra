@@ -127,5 +127,46 @@ fun Project.namespace(): String {
         .toLowerCase(Locale.getDefault())
 }
 
+fun Project.getPublishGroup(): String {
+    return rootProject.group as String
+}
+
+fun Project.getPublishArtifactId(): String {
+    return path.replace(":", "-")
+        .removeSuffix("-")
+        .removePrefix("-")
+}
+
+fun Project.getNewPublishVersion(): String {
+    val envVersion = System.getenv("PUBLISH_REF")
+    val localVersion by lazy { rootProject.version as String }
+
+    if (!envVersion.isNullOrBlank()) {
+        return getVersionFromRef(envVersion, localVersion)
+    }
+
+    return getVersionFromRef(localVersion, localVersion)
+}
+
+internal fun getVersionFromRef(
+    ref: String,
+    current: String
+): String {
+    val (major, minor) = ref.split(".")
+        .map { it.toInt() }
+    val (currentMajor, currentMinor, currentPatch) = current.split(".")
+        .map { it.toInt() }
+
+    if (major > currentMajor) {
+        return "$major.0.0"
+    }
+
+    if (minor > currentMinor){
+        return "$major.$minor.0"
+    }
+
+    return "$currentMajor.$currentMinor.${currentPatch + 1}"
+}
+
 val Project.nameOneWord
     get() = name.split("-", "_", " ", ".").joinToString("") { it.capitalize() }

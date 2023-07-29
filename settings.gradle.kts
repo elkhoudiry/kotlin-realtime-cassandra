@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "kotlin-realtime-cassandra"
 
-include(":core")
+include(":cassandra")

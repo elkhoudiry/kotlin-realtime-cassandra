@@ -5,17 +5,13 @@ plugins {
 }
 
 kotlin {
-    val publicationsFromMainHost = listOf(jvm()).map { it.name } + "kotlinMultiplatform"
+    val publicationsFromMainHost = listOf(jvm()).map { it.name } + "kotlinMultiplatform".toLowerCase()
     publishing {
         repositories {
             maven {
-                val repository =
-                    getLocalProperty("github.repository") as String?
-                        ?: System.getenv("GITHUB_REPOSITORY")
-                val user = getLocalProperty("github.user") as String?
-                    ?: System.getenv("GITHUB_ACTOR")
-                val token = getLocalProperty("github.token") as String?
-                    ?: System.getenv("GITHUB_TOKEN")
+                val repository = getLocalProperty("github.repository") as String? ?: System.getenv("GITHUB_REPOSITORY")
+                val user = getLocalProperty("github.user") as String? ?: System.getenv("GITHUB_ACTOR")
+                val token = getLocalProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN")
 
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/$repository")
@@ -29,10 +25,11 @@ kotlin {
             matching { it.name in publicationsFromMainHost }.all {
                 val targetPublication = this@all
                 tasks.withType<AbstractPublishToMaven>().matching { it.publication == targetPublication }
-                if (this is MavenPublication){
-                    this.groupId = rootProject.group.toString()
-                    this.artifactId = name
-                    this.version = rootProject.version.toString()
+                println("[LOG] $name")
+                if (this is MavenPublication) {
+                    this.groupId = project.getPublishGroup()
+                    this.artifactId = "realtime-cassandra-$name".replace("kotlinMultiplatform", "").removeSuffix("-")
+                    this.version = project.getNewPublishVersion()
                 }
             }
         }
