@@ -12,6 +12,7 @@ java {
 
 dependencies {
     compileOnly(libs.kotlin.gradle.plugin)
+    compileOnly(libs.nexus.publish.gradle.plugin)
 }
 
 gradlePlugin {
@@ -35,6 +36,10 @@ gradlePlugin {
         register("jvmTargetModule") {
             id = "jvm.target.library"
             implementationClass = "JvmTargetLibraryConventionPlugin"
+        }
+        register("publishMultiplatform") {
+            id = "publish.multiplatform"
+            implementationClass = "PublishMultiPlatformToCentralMavenConventionPlugin"
         }
     }
 }
