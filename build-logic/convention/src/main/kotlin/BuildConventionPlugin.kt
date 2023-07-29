@@ -139,6 +139,7 @@ fun Project.getPublishArtifactId(): String {
 
 fun Project.getNewPublishVersion(): String {
     val envVersion = System.getenv("PUBLISH_REF")
+    println("[LOG] ref version: $envVersion")
     val localVersion by lazy { rootProject.version as String }
 
     if (!envVersion.isNullOrBlank()) {
