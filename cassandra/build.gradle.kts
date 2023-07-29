@@ -22,10 +22,16 @@ kotlin {
             }
         }
         publications {
-            create<MavenPublication>("RealtimeCassandra") {
-                groupId = project.getPublishGroup()
-                artifactId = "realtime-cassandra"
-                version = project.getNewPublishVersion()
+            matching { it.name in publicationsFromMainHost }.all {
+                val targetPublication = this@all
+                tasks.withType<AbstractPublishToMaven>().matching { it.publication == targetPublication }
+            }
+            all {
+                if (this is MavenPublication) {
+                    this.groupId = project.getPublishGroup()
+                    this.artifactId = "realtime-cassandra-$name".replace("kotlinMultiplatform", "").removeSuffix("-")
+                    this.version = project.getNewPublishVersion()
+                }
             }
         }
     }
