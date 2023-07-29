@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.serialization) apply false
@@ -12,8 +14,26 @@ nexusPublishing {
         sonatype {
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-            username = "your-user-token-username"
-            password = "your-user-token-password"
+            getProperty("ossrhUsername", "OSSRH_USERNAME")
+            getProperty("ossrhPassword", "OSSRH_PASSWORD")
+
+            username = extra["ossrhUsername"]?.toString()
+            password = extra["ossrhPassword"]?.toString()
         }
+    }
+
+
+}
+
+fun getProperty(localProperty: String, environmentVariable: String) {
+    val secretPropsFile = project.rootProject.file("local.properties")
+    if (secretPropsFile.exists()) {
+        secretPropsFile
+            .reader()
+            .use { Properties().apply { load(it) } }
+            .filter { (name, _) -> name == localProperty }
+            .onEach { (name, value) -> extra[name.toString()] = value }
+    } else {
+        extra[localProperty] = System.getenv(environmentVariable)
     }
 }

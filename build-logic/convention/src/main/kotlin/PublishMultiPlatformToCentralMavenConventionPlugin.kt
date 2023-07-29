@@ -36,13 +36,10 @@ class PublishMultiPlatformToCentralMavenConventionPlugin : Plugin<Project> {
 
         val secretPropsFile = project.rootProject.file("local.properties")
         if (secretPropsFile.exists()) {
-            secretPropsFile.reader().use {
-                Properties().apply {
-                    load(it)
-                }
-            }.onEach { (name, value) ->
-                extra[name.toString()] = value
-            }
+            secretPropsFile
+                .reader()
+                .use { Properties().apply { load(it) } }
+                .onEach { (name, value) -> extra[name.toString()] = value }
         } else {
             extra["signing.password"] = System.getenv("SIGNING_PASSWORD")
             extra["signing.secretKey"] = System.getenv("SIGNING_KEY")
