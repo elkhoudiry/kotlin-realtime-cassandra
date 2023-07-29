@@ -19,8 +19,9 @@ jobs:
                     - 9042:9042
                 options: --health-cmd "cqlsh --debug" --health-interval 5s --health-retries 10
         steps:
+            -   run: docker ps
+            -   run: docker exec ${{ job.services.cassandra.id }} cqlsh --debug localhost:9042 --execute="use cassandra1;"
             -   uses: actions/checkout@v3
-
             -   name: Run tests
                 run: |
                     ./gradlew test
