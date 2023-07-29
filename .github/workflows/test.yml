@@ -1,0 +1,27 @@
+name: Test
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+    workflow_dispatch:
+
+
+jobs:
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: fabasoad/setup-cassandra-action@main
+                with:
+                    host: "192.13.131.0"
+                    port: 9042
+                    connect-timeout: 30
+                    keyspace: test
+                    scripts_path: ""
+
+            -   name: Run tests
+                run: |
+                    ./gradlew test
