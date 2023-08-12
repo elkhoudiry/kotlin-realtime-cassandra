@@ -1,13 +1,27 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ktlint.gradle) apply false
     alias(libs.plugins.nexus.publish)
 }
 
 group = "io.github.elkhoudiry"
 version = "0.0.1"
+
+subprojects {
+    apply(plugin = rootProject.libs.plugins.ktlint.gradle.get().pluginId)
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        filter {
+            exclude("*.gradle.kts")
+            exclude {
+                it.file.path.contains("${buildDir}/generated/")
+            }
+        }
+    }
+}
 
 nexusPublishing {
     this.repositories {
@@ -21,8 +35,6 @@ nexusPublishing {
             password = extra["ossrhPassword"]?.toString()
         }
     }
-
-
 }
 
 fun getProperty(localProperty: String, environmentVariable: String) {

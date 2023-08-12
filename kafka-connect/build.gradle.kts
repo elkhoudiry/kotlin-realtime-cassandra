@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.cassandra.driver.core)
-    api(libs.cassandra.driver.query.builder)
+    api(libs.kafka.clients)
+    api(libs.kafka.streams)
 }
