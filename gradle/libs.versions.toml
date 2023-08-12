@@ -2,12 +2,19 @@
 cassandraDriver = "4.13.0"
 cassandraUnit = "4.3.1.0"
 
-javaCompatibility = "17"
+confluent = "7.3.3"
+
+javaCompatibility = "8"
+
+kafka = "3.4.0"
 
 kotlin = "1.8.20"
 
 kotlinxCoroutines = "1.7.0-Beta"
 kotlinxSerialization = "1.5.0"
+
+ktlintGradlePlugin = "11.3.1"
+ktorClient = "2.3.2"
 
 nexusPublish = "1.3.0"
 
@@ -16,6 +23,10 @@ cassandra-driver-core = { group = "com.datastax.oss", name = "java-driver-core",
 cassandra-driver-query-builder = { group = "com.datastax.oss", name = "java-driver-query-builder", version.ref = "cassandraDriver" }
 cassandra-unit-test = { group = "org.cassandraunit", name = "cassandra-unit", version.ref = "cassandraUnit" }
 
+kafka-clients = { group = "org.apache.kafka", name = "kafka-clients", version.ref = "kafka" }
+kafka-streams = { group = "org.apache.kafka", name = "kafka-streams", version.ref = "kafka" }
+kafka-streams-avro-serde = { group = "io.confluent", name = "kafka-streams-avro-serde", version.ref = "confluent" }
+
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 
@@ -23,10 +34,18 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
+ktor-client-core-jvm = { group = "io.ktor", name = "ktor-client-core-jvm", version.ref = "ktorClient" }
+ktor-client-java-jvm = { group = "io.ktor", name = "ktor-client-java-jvm", version.ref = "ktorClient" }
+
+ktor-client-content-negotiation-jvm = { group = "io.ktor", name = "ktor-client-content-negotiation-jvm", version.ref = "ktorClient" }
+ktor-serialization-kotlinx-json-jvm = { group = "io.ktor", name = "ktor-serialization-kotlinx-json-jvm", version.ref = "ktorClient" }
+
 nexus-publish-gradle-plugin = { group = "io.github.gradle-nexus", name = "publish-plugin", version.ref = "nexusPublish" }
 
 [plugins]
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+ktlint-gradle = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradlePlugin" }
 
 nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexusPublish" }
