@@ -2,22 +2,29 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.extra
+import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import java.util.Properties
 
 class PublishToCentralMavenConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) = with(target) {
+        pluginManager.apply("java-library")
         pluginManager.apply("maven-publish")
         pluginManager.apply("signing")
 
+        val publicationsFromMainHost = listOf(name)
         val javadocJar by tasks.registering(Jar::class) { archiveClassifier.set("javadoc") }
 
         // Stub secrets to let the project sync and build without the publication values set up
@@ -41,16 +48,13 @@ class PublishToCentralMavenConventionPlugin : Plugin<Project> {
 
         extensions.configure<PublishingExtension> {
             publications {
-                all {
-                    if (this !is MavenPublication) {
-                        return@all
-                    }
+                create<MavenPublication>("mavenJava") {
+                    from(components.getByName("java"))
                     this.groupId = project.getPublishGroup()
                     this.artifactId = "realtime-cassandra-$name".removeSuffix("-")
                     this.version = project.getNewPublishVersion()
                     artifact(javadocJar)
 
-                    // Provide artifacts information requited by Maven Central
                     pom {
                         name.set("Realtime Cassandra")
                         description.set("Kotlin multiplatform realtime cassandra library")
@@ -74,12 +78,13 @@ class PublishToCentralMavenConventionPlugin : Plugin<Project> {
                         }
                     }
                 }
+
             }
         }
 
         extensions.configure<SigningExtension> {
             useInMemoryPgpKeys(extra["signing.secretKey"]?.toString(), extra["signing.password"]?.toString())
-            sign(extensions.getByType<PublishingExtension>().publications)
+            sign(extensions.getByType<PublishingExtension>().publications["mavenJava"])
         }
 
         tasks.configureEach {
