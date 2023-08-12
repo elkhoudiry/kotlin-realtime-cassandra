@@ -51,7 +51,7 @@ class PublishToCentralMavenConventionPlugin : Plugin<Project> {
                 create<MavenPublication>("mavenJava") {
                     from(components.getByName("java"))
                     this.groupId = project.getPublishGroup()
-                    this.artifactId = "realtime-cassandra-$name".removeSuffix("-")
+                    this.artifactId = "realtime-${project.name}".removeSuffix("-")
                     this.version = project.getNewPublishVersion()
                     artifact(javadocJar)
 
