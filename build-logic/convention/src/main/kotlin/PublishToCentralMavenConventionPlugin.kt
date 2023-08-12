@@ -1,5 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
@@ -24,14 +25,16 @@ class PublishToCentralMavenConventionPlugin : Plugin<Project> {
         pluginManager.apply("maven-publish")
         pluginManager.apply("signing")
 
-        val publicationsFromMainHost = listOf(name)
-        val javadocJar by tasks.registering(Jar::class) { archiveClassifier.set("javadoc") }
-
         // Stub secrets to let the project sync and build without the publication values set up
         extra["signing.password"] = null
         extra["signing.secretKey"] = null
         extra["ossrhUsername"] = null
         extra["ossrhPassword"] = null
+
+        extensions.configure<JavaPluginExtension> {
+            withJavadocJar()
+            withSourcesJar()
+        }
 
         val secretPropsFile = project.rootProject.file("local.properties")
         if (secretPropsFile.exists()) {
@@ -53,7 +56,6 @@ class PublishToCentralMavenConventionPlugin : Plugin<Project> {
                     this.groupId = project.getPublishGroup()
                     this.artifactId = "realtime-${project.name}".removeSuffix("-")
                     this.version = project.getNewPublishVersion()
-                    artifact(javadocJar)
 
                     pom {
                         name.set("Realtime Cassandra")
