@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
 group = "io.github.elkhoudiry.build.logic"
@@ -8,6 +8,10 @@ group = "io.github.elkhoudiry.build.logic"
 java {
     sourceCompatibility = JavaVersion.toVersion(libs.versions.javaCompatibility.get())
     targetCompatibility = JavaVersion.toVersion(libs.versions.javaCompatibility.get())
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.javaCompatibility.get()))
+    }
 }
 
 dependencies {
@@ -25,21 +29,13 @@ gradlePlugin {
             id = "config.values.module"
             implementationClass = "ConfigValuesConventionPlugin"
         }
-        register("commonModule") {
-            id = "common.module"
-            implementationClass = "CommonModuleConventionPlugin"
+        register("kotlinModule") {
+            id = "kotlin.module"
+            implementationClass = "KotlinModuleConventionPlugin"
         }
-        register("commonLibrary") {
-            id = "common.library"
-            implementationClass = "CommonLibraryConventionPlugin"
-        }
-        register("jvmTargetModule") {
-            id = "jvm.target.library"
-            implementationClass = "JvmTargetLibraryConventionPlugin"
-        }
-        register("publishMultiplatform") {
-            id = "publish.multiplatform"
-            implementationClass = "PublishMultiPlatformToCentralMavenConventionPlugin"
+        register("publishToMavenCentral") {
+            id = "publish.maven.central"
+            implementationClass = "PublishToCentralMavenConventionPlugin"
         }
     }
 }
