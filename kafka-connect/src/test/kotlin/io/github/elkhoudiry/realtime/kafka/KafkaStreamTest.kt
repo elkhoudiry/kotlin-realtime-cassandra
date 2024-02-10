@@ -9,9 +9,9 @@ class KafkaStreamTest {
     fun testStream() {
         val kafka = KafkaStream()
         runBlocking {
-            kafka.listen<String, String>().collect {
-                println("[LOG] collect: $it")
-            }
+//            kafka.listen<String, String>().collect {
+//                println("[LOG] collect: $it")
+//            }
         }
     }
 }

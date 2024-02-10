@@ -19,12 +19,18 @@ class CassandraConnector {
     suspend fun connect(
         hostname: String,
         port: Int,
-        localDatacenter: String
+        localDatacenter: String,
+        username: String = "cassandra",
+        password: String = "cassandra"
     ) = withContext(currentCoroutineContext() + Dispatchers.IO) {
         _session = CqlSession
             .builder()
             .addContactPoint(InetSocketAddress(hostname, port))
             .withLocalDatacenter(localDatacenter)
+            .withAuthCredentials(
+                /* username = */ username,
+                /* password = */ password
+            )
             .build()
     }
 
